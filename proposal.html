@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+  body {
+    font-family: 'Great Vibes', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: radial-gradient(circle at top left, #ff9aa2, #ffb6b9, #ffdac1);
+    text-align: center;
+    color: #8B004B; /* dark romantic color */
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Hearts in background */
+  body::before {
+    content: "❤️💗💕❤️💗💕";
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 3rem;
+    opacity: 0.1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    animation: floatHearts 25s linear infinite;
+  }
+
+  @keyframes floatHearts {
+    0% {transform: translateY(0);}
+    100% {transform: translateY(-1200px);}
+  }
+
+  .slide {
+    display: none;
+    padding: 30px 25px;
+    max-width: 500px;
+    background: rgba(255, 240, 245, 0.95);
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #8B004B; /* dark romantic text */
+  }
+
+  .slide h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .active {
+    display: block;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.95);}
+    to {opacity: 1; transform: scale(1);}
+  }
+
+  /* Card style */
+  .card {
+    background-color: #fff0f5;
+    padding: 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    border: 2px dashed #ff6b81;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    display: inline-block;
+    color: #8B004B;
+    text-align: left;
+  }
+
+  .card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
+  /* Confession letter scrollable */
+  #letterContent {
+    display: block;
+  }
+
+  #continueBtn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Great Vibes', cursive;
+    font-weight: bold;
+    border: 2px dashed #ff6b81;
+    background-color: #fff0f5;
+    color: #8B004B;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: 0.3s;
+  }
+
+  #continueBtn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  }
+
+  #outcome {
+    font-size: 1.6rem;
+    line-height: 1.8;
+  }
+
+  /* Letter-card style Yes/No buttons */
+  .card-button {
+    display: inline-block;
+    padding: 20px 35px;
+    margin: 10px;
+    font-size: 1.3rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Great Vibes', cursive;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border: 2px dashed #e60073;
+    background-color: #fff0f5;
+    color: #8B004B;
+    transition: 0.3s;
+  }
+
+  .card-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  }
+
+  .yes-btn {
+    border-color: #ff6b81;
+  }
+
+  .no-btn {
+    border-color: #ffb6b9;
+    opacity: 0.9;
+  }
+
+  /* Floating hearts on click */
+  .heart {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #ff6b81;
+    animation: floatUp 1.2s ease-out forwards;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Slide 1 -->
+<div id="slide1" class="slide active">
+  <h2>Hey Saravana! 👋</h2>
+  <p>There’s something I wanted you to see 🤍</p>
+</div>
+
+<!-- Slide 2 -->
+<div id="slide2" class="slide">
+  <h2>Do you know what this is for? 🤔</h2>
+  <p>Probably not<br>So let me show you.<br>Read it slowly 💭</p>
+</div>
+
+<!-- Slide 3 -->
+<div id="slide3" class="slide">
+  <div class="card" onclick="spawnHeart(event); nextSlide()">
+    Are you ready? <br> Okay, go on 👉
+  </div>
+</div>
+
+<!-- Slide 4 -->
+<div id="slide4" class="slide">
+  <div class="card" onclick="spawnHeart(event); openLetter()">Tap this 💌</div>
+</div>
+
+<!-- Slide 5: Scrollable Letter Card -->
+<div id="slide5" class="slide">
+  <div class="card" style="max-height: 300px; overflow-y: auto;">
+    <p id="letterContent">
+      We started just as friends, and at first everything felt normal and easy.<br>
+      But slowly, without me even realizing it, my feelings began to change.<br>
+      Somewhere along the way, I felt something more than friendship growing inside me.<br><br>
+
+      I wasn’t very clear at first, and that confused me a lot.<br>
+      So many thoughts kept running through my mind, and I didn’t know what to do.<br>
+      I wasn’t able to face you properly, and I was scared to tell you how I felt.<br>
+      I kept holding everything inside because I didn’t want to mess things up.<br><br>
+
+      When I couldn’t see you, I missed you more than I expected.<br>
+      I kept wondering if you would come, waiting and hoping to see you.<br>
+      Being around you made me feel happy, and talking to you always felt natural.<br><br>
+
+      And now I know —<br>
+      I like you.<br>
+      Not suddenly, not impulsively, but genuinely.<br><br>
+
+      And somewhere along the way, that liking quietly turned into love.<br>
+      <strong>I love you 🥹</strong><br><br>
+
+      I didn’t want to keep this unsaid anymore, so here I am… telling you.
+    </p>
+  </div>
+  <button id="continueBtn" onclick="spawnHeart(event); nextSlide()">Continue 🤍</button>
+</div>
+
+<!-- Slide 6 -->
+<div id="slide6" class="slide">
+  <h2>Okaay… take a breath 😃</h2>
+  <div class="card" onclick="spawnHeart(event); nextSlide()">Next</div>
+</div>
+
+<!-- Slide 7 -->
+<div id="slide7" class="slide">
+  <h2>Do you think this could be an “us”? 👀💗</h2>
+  <div class="card-button yes-btn" onclick="spawnHeart(event); yesClicked()">Yes 🥹</div>
+  <div class="card-button no-btn" onclick="spawnHeart(event); noClicked()">No</div>
+</div>
+
+<!-- Slide 8: Outcome -->
+<div id="slide8" class="slide" style="display:none;">
+  <p id="outcome"></p>
+</div>
+
+<!-- Slide 9: Final Bye -->
+<div id="slide9" class="slide">
+  <h2>Yayyyy!! Bye bye 😃💖</h2>
+</div>
+
+<script>
+let currentSlide = 1;
+
+// Auto-advance slides 1 & 2
+setTimeout(() => { nextSlide(); }, 3000); 
+setTimeout(() => { if(currentSlide === 2) nextSlide(); }, 7000); 
+
+function nextSlide() {
+  const current = document.getElementById('slide' + currentSlide);
+  if(current) current.classList.remove('active');
+  currentSlide++;
+  const nextSlideEl = document.getElementById('slide' + currentSlide);
+  if(nextSlideEl) nextSlideEl.classList.add('active');
+}
+
+// Reveal the letter when card is clicked
+function openLetter() {
+  document.getElementById('slide4').classList.remove('active');
+  document.getElementById('slide5').classList.add('active');
+}
+
+// Yes / No outcomes
+function yesClicked() {
+  document.getElementById('slide7').classList.remove('active');
+  const slide8 = document.getElementById('slide8');
+  slide8.style.display = 'block';
+  slide8.classList.add('active');
+  document.getElementById('outcome').innerHTML = `
+    promise me this 🤍<br><br>
+    If we choose this…<br>
+    let it be real.<br>
+    Let it be honest.<br>
+    Let it be something we protect.<br>
+    Not just for now,<br>
+    but with the intention of forever —<br>
+    growing, choosing, and standing by each other<br>
+    no matter what comes our way.
+  `;
+  setTimeout(() => {
+    document.getElementById('slide8').classList.remove('active');
+    document.getElementById('slide9').classList.add('active');
+  }, 3000);
+}
+
+function noClicked() {
+  document.getElementById('slide7').classList.remove('active');
+  const slide8 = document.getElementById('slide8');
+  slide8.style.display = 'block';
+  slide8.classList.add('active');
+  document.getElementById('outcome').innerHTML = `I still love you 🥹`;
+  setTimeout(() => {
+    document.getElementById('slide8').classList.remove('active');
+    document.getElementById('slide9').classList.add('active');
+  }, 3000);
+}
+
+// Floating heart animation on click
+function spawnHeart(event) {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = event.clientX + 'px';
+  heart.style.top = event.clientY + 'px';
+  heart.textContent = '💖';
+  document.body.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 1200);
+}
+</script>
+
+</body>
+</html>
